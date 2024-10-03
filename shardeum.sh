@@ -537,30 +537,30 @@ RPC_SERVER_URL="https://atomium.shardeum.org"
 
 cat <<EOF
 
-###############################
+${BOLD_GREEN}###############################
 # 1. Compose 프로젝트 가져오기  #
-###############################
+###############################${NC}
 
 EOF
 
 if [ -d "$NODEHOME" ]; then
   if [ "$NODEHOME" != "$(pwd)" ]; then
-    echo "기존 디렉토리 $NODEHOME을 삭제합니다..."
+    echo -e "${YELLOW}기존 디렉토리 $NODEHOME을 삭제합니다...${NC}"
     rm -rf "$NODEHOME"
   else
-    echo "현재 작업 디렉토리를 삭제할 수 없습니다. 다른 디렉토리로 이동한 후 다시 시도하세요."
+    echo -e "${RED}현재 작업 디렉토리를 삭제할 수 없습니다. 다른 디렉토리로 이동한 후 다시 시도하세요.${NC}"
   fi
 fi
 
-git clone -b dev https://github.com/shardeum/validator-dashboard.git ${NODEHOME} || { echo "오류: 권한이 거부되었습니다. 스크립트를 종료합니다."; exit 1; }
+git clone -b dev https://github.com/shardeum/validator-dashboard.git ${NODEHOME} || { echo -e "${BOLD_RED}오류: 권한이 거부되었습니다. 스크립트를 종료합니다.${NC}"; exit 1; }
 cd ${NODEHOME}
 chmod a+x ./*.sh
 
 cat <<EOF
 
-##############################
+${BOLD_YELLOW}##############################
 # 2. .env 파일 생성 및 설정   #
-##############################
+##############################${NC}
 
 EOF
 
@@ -590,9 +590,9 @@ EOL
 
 cat <<EOF
 
-#########################
+${BOLD_GREEN}#########################
 # 3. 오래된 이미지 정리  #
-#########################
+#########################${NC}
 
 EOF
 
@@ -600,9 +600,9 @@ EOF
 
 cat <<EOF
 
-######################
+${BOLD_YELLOW}######################
 # 4. 기본 이미지 빌드 #
-######################
+######################${NC}
 
 EOF
 
@@ -611,9 +611,9 @@ docker-safe build --no-cache -t local-dashboard -f Dockerfile --build-arg RUNDAS
 
 cat <<EOF
 
-############################
+${BOLD_GREEN}############################
 # 5. Compose 프로젝트 시작  #
-############################
+############################${NC}
 
 EOF
 
@@ -629,15 +629,15 @@ else
 fi
 ./docker-up.sh
 
-echo "이미지를 시작합니다. 시간이 걸릴 수 있습니다..."
+echo -e "${GREEN}이미지를 시작합니다. 시간이 걸릴 수 있습니다...${NC}"
 (docker-safe logs -f shardeum-dashboard &) | grep -q 'done'
 
 # secrets.json이 존재하는지 확인하고 컨테이너 내부에 복사
 cd ${CURRENT_DIRECTORY}
 if [ -f secrets.json ]; then
-  echo "기존 노드를 재사용합니다."
+  echo -e "${YELLOW}기존 노드를 재사용합니다.${NC}"
   CONTAINER_ID=$(docker-safe ps -qf "ancestor=local-dashboard")
-  echo "새 컨테이너 ID는 : $CONTAINER_ID"
+  echo -e "${GREEN}새 컨테이너 ID는 : $CONTAINER_ID${NC}"
   docker-safe cp ./secrets.json "${CONTAINER_ID}:/home/node/app/cli/build/secrets.json"
   rm -f secrets.json
 fi
@@ -646,7 +646,7 @@ fi
 if [ $RUNDASHBOARD = "y" ]
 then
 cat <<EOF
-  웹 대시보드를 사용하려면:
+  ${BOLD_GREEN}웹 대시보드를 사용하려면:${NC}
     1. 노드에 연결하는 데 사용한 IP 주소를 기록하세요. 이는 외부 IP, LAN IP 또는 localhost일 수 있습니다.
     2. 웹 브라우저를 열고 웹 대시보드에 https://<노드 IP 주소>:$DASHPORT로 이동하세요.
     3. 설정 탭으로 이동하여 지갑을 연결하세요.
@@ -659,7 +659,7 @@ fi
 
 cat <<EOF
 
-명령줄 인터페이스를 사용하려면:
+${BOLD_YELLOW}명령줄 인터페이스를 사용하려면:${NC}
 	1. Shardeum 홈 디렉토리 ($NODEHOME)로 이동하세요.
 	2. ./shell.sh로 유효성 검사기 컨테이너에 들어가세요.
 	3. "operator-cli --help" 명령을 실행하세요.
