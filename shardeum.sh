@@ -436,6 +436,7 @@ list_used_ports() {
 }
 
 while :; do
+  list_used_ports
   read -p "웹 기반 대시보드에 접근할 포트(1025-65536)를 입력하세요 (기본값 $DASHPORT_DEFAULT): " DASHPORT
   DASHPORT=${DASHPORT:-$DASHPORT_DEFAULT}
   [[ $DASHPORT =~ ^[0-9]+$ ]] || { echo "유효한 포트를 입력하세요"; continue; }
@@ -448,7 +449,7 @@ while :; do
 done
 
 while :; do
-  read -p "수동으로 외부IP를 설정하려면 IPv4주소를 입력하세요. 아니면 기본값을 쓰세요.(기본값=$EXTERNALIP_DEFAULT): " EXTERNALIP
+  read -p "만약 수동으로 외부IP를 설정하려면 IPv4주소를 입력하세요. 아니라면 그냥 엔터를 누르세요.(기본값=$EXTERNALIP_DEFAULT): " EXTERNALIP
   EXTERNALIP=${EXTERNALIP:-$EXTERNALIP_DEFAULT}
 
   if [ "$EXTERNALIP" == "auto" ]; then
@@ -478,7 +479,7 @@ while :; do
 done
 
 while :; do
-  read -p "수동으로 내부IP를 설정하려면 IPv4주소를 입력하세요.아니면 기본값을 쓰세요.(기본값=$INTERNALIP_DEFAULT): " INTERNALIP
+  read -p "먄약 수동으로 내부IP를 설정하려면 IPv4주소를 입력하세요.아니라면 그냥 엔터를 누르세요.(기본값=$INTERNALIP_DEFAULT): " INTERNALIP
   INTERNALIP=${INTERNALIP:-$INTERNALIP_DEFAULT}
 
   if [ "$INTERNALIP" == "auto" ]; then
@@ -507,12 +508,8 @@ while :; do
   fi
 done
 
-list_used_ports() {
-  echo "현재 사용 중인 포트들은 다음과 같습니다. 중복되지 않게 해주세요:"
-  ss -tuln | awk 'NR>1 {print $5}' | awk -F: '{print $NF}' | sort -n | uniq
-}
-
 while :; do
+  list_used_ports
   echo "Sphinx 네트워크에서 유효성 검사기를 실행하려면 방화벽에서 두 개의 포트를 열어야 합니다."
   read -p "이것은 노드 간의 p2p 통신을 허용합니다. p2p 통신을 위한 첫 번째 포트(1025-65536)를 입력하세요 (기본값 $SHMEXT_DEFAULT): " SHMEXT
   SHMEXT=${SHMEXT:-$SHMEXT_DEFAULT}
