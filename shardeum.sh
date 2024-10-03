@@ -333,9 +333,9 @@ fi
 
 cat << EOF
 
-############################
+echo -e "${BOLD_GREEN}############################
 # 0. 사용자로부터 정보 받기  #
-############################
+############################${NC}"
 
 EOF
 
@@ -537,11 +537,9 @@ RPC_SERVER_URL="https://atomium.shardeum.org"
 
 cat <<EOF
 
-${BOLD_GREEN}###############################
+echo -e "${BOLD_GREEN}###############################
 # 1. Compose 프로젝트 가져오기  #
-###############################${NC}
-
-EOF
+###############################${NC}"
 
 if [ -d "$NODEHOME" ]; then
   if [ "$NODEHOME" != "$(pwd)" ]; then
@@ -556,13 +554,9 @@ git clone -b dev https://github.com/shardeum/validator-dashboard.git ${NODEHOME}
 cd ${NODEHOME}
 chmod a+x ./*.sh
 
-cat <<EOF
-
-${BOLD_YELLOW}##############################
+echo -e "${BOLD_YELLOW}##############################
 # 2. .env 파일 생성 및 설정   #
-##############################${NC}
-
-EOF
+##############################${NC}"
 
 SERVERIP=$(get_external_ip)
 LOCALLANIP=$(get_ip)
@@ -588,34 +582,22 @@ maxNodes=1200
 nodesPerConsensusGroup=128
 EOL
 
-cat <<EOF
-
-${BOLD_GREEN}#########################
+echo -e "${BOLD_GREEN}#########################
 # 3. 오래된 이미지 정리  #
-#########################${NC}
-
-EOF
+#########################${NC}"
 
 ./cleanup.sh
 
-cat <<EOF
-
-${BOLD_YELLOW}######################
+echo -e "${BOLD_YELLOW}######################
 # 4. 기본 이미지 빌드 #
-######################${NC}
-
-EOF
+######################${NC}"
 
 cd ${NODEHOME} &&
 docker-safe build --no-cache -t local-dashboard -f Dockerfile --build-arg RUNDASHBOARD=${RUNDASHBOARD} .
 
-cat <<EOF
-
-${BOLD_GREEN}############################
+echo -e "${BOLD_GREEN}############################
 # 5. Compose 프로젝트 시작  #
-############################${NC}
-
-EOF
+############################${NC}"
 
 cd ${NODEHOME}
 if [[ "$(uname)" == "Darwin" ]]; then
