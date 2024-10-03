@@ -432,7 +432,7 @@ echo # 입력 후 줄바꿈
 # 사용 중인 포트를 나열하는 함수
 list_used_ports() {
   echo "현재 사용 중인 포트들은 다음과 같습니다. 중복되지 않게 해주세요:"
-  ss -tuln | awk 'NR>1 {print $5}' | awk -F: '{print $NF}' | sort -n | uniq
+  ss -tuln | awk 'NR>1 {print $5}' | awk -F: '{print $NF}' | sort -n | uniq | paste -sd ', ' -
 }
 
 while :; do
