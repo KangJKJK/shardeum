@@ -535,8 +535,6 @@ done
 APPMONITOR="96.126.116.124"
 RPC_SERVER_URL="https://atomium.shardeum.org"
 
-cat <<EOF
-
 echo -e "${BOLD_GREEN}###############################
 # 1. Compose 프로젝트 가져오기  #
 ###############################${NC}"
@@ -625,8 +623,7 @@ if [ -f secrets.json ]; then
 fi
 
 # 들여쓰기 하지 마세요
-if [ $RUNDASHBOARD = "y" ]
-then
+if [ "$RUNDASHBOARD" = "y" ]; then
 cat <<EOF
   ${BOLD_GREEN}웹 대시보드를 사용하려면:${NC}
     1. 노드에 연결하는 데 사용한 IP 주소를 기록하세요. 이는 외부 IP, LAN IP 또는 localhost일 수 있습니다.
